@@ -10,7 +10,7 @@ export const InteractiveGeometry = () => {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.2;
       groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
     }
   });
@@ -19,7 +19,7 @@ export const InteractiveGeometry = () => {
     <group ref={groupRef}>
       <Float speed={2} rotationIntensity={1} floatIntensity={2}>
         <Sphere
-          args={[1, 64, 64]}
+          args={[0.8, 32, 32]}
           position={[-2, 0, 0]}
           onPointerEnter={() => setHovered(true)}
           onPointerLeave={() => setHovered(false)}
@@ -34,7 +34,7 @@ export const InteractiveGeometry = () => {
       </Float>
 
       <Float speed={1.5} rotationIntensity={2} floatIntensity={1}>
-        <Box args={[1.5, 1.5, 1.5]} position={[2, 1, -1]}>
+        <Box args={[1.2, 1.2, 1.2]} position={[2, 1, -1]}>
           <meshStandardMaterial
             color="#EC4899"
             transparent
@@ -44,7 +44,7 @@ export const InteractiveGeometry = () => {
       </Float>
 
       <Float speed={2.5} rotationIntensity={1.5} floatIntensity={3}>
-        <Torus args={[1, 0.3, 16, 32]} position={[0, -2, 1]}>
+        <Torus args={[0.8, 0.3, 16, 32]} position={[0, -2, 1]}>
           <meshStandardMaterial
             color="#10B981"
             transparent
@@ -53,14 +53,13 @@ export const InteractiveGeometry = () => {
         </Torus>
       </Float>
 
-      {/* Particle system */}
       <points>
-        <sphereGeometry args={[3, 50, 50]} />
+        <sphereGeometry args={[4, 80, 80]} />
         <pointsMaterial
           color="#6366F1"
-          size={0.02}
+          size={0.015}
           transparent
-          opacity={0.8}
+          opacity={0.6}
         />
       </points>
     </group>
