@@ -1,3 +1,4 @@
+
 import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion";
 import { InteractiveGeometry } from "@/components/3d/InteractiveGeometry";
@@ -11,11 +12,6 @@ export const Hero = () => {
           camera={{ position: [0, 0, 8], fov: 50 }}
           className="w-full h-full"
         >
-          <ambientLight intensity={0.4} />
-          <directionalLight position={[10, 10, 5]} intensity={0.8} />
-          <directionalLight position={[-10, -10, -5]} intensity={0.3} />
-          <pointLight position={[0, 5, 0]} intensity={0.5} />
-          
           <Suspense fallback={null}>
             <InteractiveGeometry />
           </Suspense>

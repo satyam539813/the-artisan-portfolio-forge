@@ -1,11 +1,11 @@
 
 import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Float, useGLTF } from "@react-three/drei";
+import { Float, useGLTF, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
-// Using a more reliable model URL
-const STATUE_MODEL_URL = "https://threejs.org/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb";
+// Sketchfab model URL for the Graveyard Angel statue
+const STATUE_MODEL_URL = "https://sketchfab.com/models/bf55c6686ae7454181fa33662e7eca29/embed";
 
 export const InteractiveGeometry = () => {
   const groupRef = useRef<THREE.Group>(null);
@@ -36,23 +36,26 @@ export const InteractiveGeometry = () => {
   // If model fails to load, show a fallback geometry
   if (!scene) {
     return (
-      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
-        <mesh
-          ref={meshRef}
-          position={[0, 0, 0]}
-          onPointerEnter={() => setHovered(true)}
-          onPointerLeave={() => setHovered(false)}
-        >
-          <sphereGeometry args={[1.5, 32, 32]} />
-          <meshStandardMaterial
-            color={hovered ? "#8B5CF6" : "#E5E7EB"}
-            metalness={0.3}
-            roughness={0.4}
-            transparent
-            opacity={0.9}
-          />
-        </mesh>
-      </Float>
+      <>
+        <Environment preset="sunset" />
+        <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
+          <mesh
+            ref={meshRef}
+            position={[0, 0, 0]}
+            onPointerEnter={() => setHovered(true)}
+            onPointerLeave={() => setHovered(false)}
+          >
+            <sphereGeometry args={[1.5, 32, 32]} />
+            <meshStandardMaterial
+              color={hovered ? "#8B5CF6" : "#E5E7EB"}
+              metalness={0.3}
+              roughness={0.4}
+              transparent
+              opacity={0.9}
+            />
+          </mesh>
+        </Float>
+      </>
     );
   }
 
@@ -75,17 +78,20 @@ export const InteractiveGeometry = () => {
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
-      <group
-        ref={groupRef}
-        scale={[2, 2, 2]}
-        position={[0, -1, 0]}
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
-      >
-        <primitive object={clonedScene} />
-      </group>
-    </Float>
+    <>
+      <Environment preset="sunset" />
+      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
+        <group
+          ref={groupRef}
+          scale={[2, 2, 2]}
+          position={[0, -1, 0]}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+        >
+          <primitive object={clonedScene} />
+        </group>
+      </Float>
+    </>
   );
 };
 
