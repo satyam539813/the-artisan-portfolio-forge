@@ -4,15 +4,22 @@ import { useFrame } from "@react-three/fiber";
 import { Float, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-// Using a free statue model from Sketchfab (CC licensed)
+// Using a more reliable model URL
 const STATUE_MODEL_URL = "https://threejs.org/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb";
 
 export const InteractiveGeometry = () => {
   const groupRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   
-  // Load the GLTF model
-  const { scene } = useGLTF(STATUE_MODEL_URL);
+  // Load the GLTF model with error handling
+  let scene;
+  try {
+    const gltf = useGLTF(STATUE_MODEL_URL);
+    scene = gltf.scene;
+  } catch (error) {
+    console.log("GLTF loading error:", error);
+    scene = null;
+  }
 
   useFrame((state) => {
     if (groupRef.current) {
@@ -20,6 +27,29 @@ export const InteractiveGeometry = () => {
       groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
     }
   });
+
+  // If model fails to load, show a fallback geometry
+  if (!scene) {
+    return (
+      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
+        <mesh
+          ref={groupRef}
+          position={[0, 0, 0]}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+        >
+          <sphereGeometry args={[1.5, 32, 32]} />
+          <meshStandardMaterial
+            color={hovered ? "#8B5CF6" : "#E5E7EB"}
+            metalness={0.3}
+            roughness={0.4}
+            transparent
+            opacity={0.9}
+          />
+        </mesh>
+      </Float>
+    );
+  }
 
   // Clone the scene to avoid sharing the same geometry
   const clonedScene = scene.clone();
@@ -34,6 +64,8 @@ export const InteractiveGeometry = () => {
         transparent: true,
         opacity: 0.9
       });
+      child.castShadow = true;
+      child.receiveShadow = true;
     }
   });
 
@@ -41,8 +73,8 @@ export const InteractiveGeometry = () => {
     <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
       <group
         ref={groupRef}
-        scale={[1.5, 1.5, 1.5]}
-        position={[0, -0.5, 0]}
+        scale={[2, 2, 2]}
+        position={[0, -1, 0]}
         onPointerEnter={() => setHovered(true)}
         onPointerLeave={() => setHovered(false)}
       >
@@ -53,4 +85,8 @@ export const InteractiveGeometry = () => {
 };
 
 // Preload the model
-useGLTF.preload(STATUE_MODEL_URL);
+try {
+  useGLTF.preload(STATUE_MODEL_URL);
+} catch (error) {
+  console.log("Preload error:", error);
+}

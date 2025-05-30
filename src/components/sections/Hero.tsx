@@ -1,20 +1,24 @@
-
 import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion";
 import { InteractiveGeometry } from "@/components/3d/InteractiveGeometry";
+import { Suspense } from "react";
 
 export const Hero = () => {
   return (
     <section className="h-screen relative overflow-hidden">
       <div className="absolute inset-0">
         <Canvas
-          camera={{ position: [0, 0, 5], fov: 75 }}
+          camera={{ position: [0, 0, 8], fov: 50 }}
           className="w-full h-full"
         >
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[10, 10, 5]} intensity={0.8} />
+          <directionalLight position={[-10, -10, -5]} intensity={0.3} />
+          <pointLight position={[0, 5, 0]} intensity={0.5} />
           
-          <InteractiveGeometry />
+          <Suspense fallback={null}>
+            <InteractiveGeometry />
+          </Suspense>
         </Canvas>
       </div>
       
