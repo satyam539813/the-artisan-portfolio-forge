@@ -5,44 +5,81 @@ import { Card, CardContent } from "@/components/ui/card";
 export const Skills = () => {
   const skillCategories = [
     {
-      title: "Frontend Development",
+      title: "Frontend Mastery",
       icon: "💻",
-      skills: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Three.js", "Framer Motion"],
-      color: "from-blue-500 to-cyan-500"
+      skills: [
+        { name: "React & Next.js", level: 95 },
+        { name: "TypeScript", level: 90 },
+        { name: "Three.js & WebGL", level: 85 },
+        { name: "Tailwind CSS", level: 95 },
+        { name: "Framer Motion", level: 88 },
+        { name: "GSAP", level: 82 }
+      ],
+      gradient: "from-blue-500 via-purple-500 to-cyan-500"
     },
     {
-      title: "UI/UX Design",
+      title: "Design Systems",
       icon: "🎨",
-      skills: ["Figma", "Adobe XD", "Prototyping", "User Research", "Wireframing", "Design Systems"],
-      color: "from-purple-500 to-pink-500"
+      skills: [
+        { name: "Figma", level: 92 },
+        { name: "Adobe Creative Suite", level: 88 },
+        { name: "Prototyping", level: 90 },
+        { name: "User Research", level: 85 },
+        { name: "Design Tokens", level: 87 },
+        { name: "Component Libraries", level: 90 }
+      ],
+      gradient: "from-purple-500 via-pink-500 to-rose-500"
     },
     {
-      title: "3D Product Design",
+      title: "3D & Motion",
       icon: "🎭",
-      skills: ["Blender", "Cinema 4D", "Product Visualization", "3D Modeling", "Texturing", "Rendering"],
-      color: "from-green-500 to-emerald-500"
+      skills: [
+        { name: "Blender", level: 88 },
+        { name: "Cinema 4D", level: 82 },
+        { name: "After Effects", level: 85 },
+        { name: "Shader Programming", level: 78 },
+        { name: "3D Web Integration", level: 85 },
+        { name: "Motion Design", level: 87 }
+      ],
+      gradient: "from-green-500 via-emerald-500 to-teal-500"
     }
   ];
 
   return (
-    <section id="skills" className="py-20 bg-gray-900">
-      <div className="container mx-auto px-6">
+    <section id="skills" className="py-32 bg-gradient-to-b from-purple-950/10 to-black relative overflow-hidden">
+      <div className="absolute inset-0 mesh-gradient opacity-20" />
+      
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-20"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+          <motion.div
+            className="inline-block px-4 py-2 glass-effect rounded-full text-sm font-medium text-violet-300 mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
             Skills & Expertise
+          </motion.div>
+          
+          <h2 className="text-5xl md:text-7xl font-playfair font-bold mb-8">
+            <span className="gradient-text">Technical</span>
+            <br />
+            <span className="text-white/90">Arsenal</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            A comprehensive toolkit spanning development, design, and 3D visualization
+          
+          <p className="text-xl text-gray-300 max-w-4xl mx-auto font-inter leading-relaxed">
+            A comprehensive toolkit spanning development, design, and 3D visualization, 
+            constantly evolving with the latest industry standards.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {skillCategories.map((category, index) => (
             <motion.div
               key={category.title}
@@ -51,34 +88,40 @@ export const Skills = () => {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm h-full hover:bg-gray-800/70 transition-all duration-300">
+              <Card className="glass-effect border-white/10 h-full hover:border-violet-400/30 transition-all duration-500 group overflow-hidden">
                 <CardContent className="p-8">
-                  <div className="text-center mb-6">
-                    <div className="text-4xl mb-4">{category.icon}</div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{category.title}</h3>
-                    <div className={`h-1 w-20 mx-auto bg-gradient-to-r ${category.color} rounded-full`}></div>
+                  <div className="text-center mb-8">
+                    <div className="text-4xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                      {category.icon}
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-3 font-space">{category.title}</h3>
+                    <div className={`h-1 w-20 mx-auto bg-gradient-to-r ${category.gradient} rounded-full`} />
                   </div>
                   
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {category.skills.map((skill, skillIndex) => (
                       <motion.div
-                        key={skill}
-                        className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg"
+                        key={skill.name}
+                        className="relative"
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: (index * 0.2) + (skillIndex * 0.1) }}
+                        transition={{ duration: 0.6, delay: (index * 0.2) + (skillIndex * 0.1) }}
                         viewport={{ once: true }}
                       >
-                        <span className="text-gray-300">{skill}</span>
-                        <div className="flex space-x-1">
-                          {[...Array(5)].map((_, i) => (
-                            <div
-                              key={i}
-                              className={`w-2 h-2 rounded-full ${
-                                i < 4 ? `bg-gradient-to-r ${category.color}` : 'bg-gray-600'
-                              }`}
-                            />
-                          ))}
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-gray-300 font-inter font-medium">{skill.name}</span>
+                          <span className="text-sm text-violet-300 font-space font-bold">{skill.level}%</span>
+                        </div>
+                        <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+                          <motion.div
+                            className={`h-full bg-gradient-to-r ${category.gradient} rounded-full relative`}
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${skill.level}%` }}
+                            transition={{ duration: 1.5, delay: (index * 0.2) + (skillIndex * 0.1) + 0.5 }}
+                            viewport={{ once: true }}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-glow" />
+                          </motion.div>
                         </div>
                       </motion.div>
                     ))}

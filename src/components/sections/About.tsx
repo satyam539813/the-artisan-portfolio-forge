@@ -4,47 +4,97 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export const About = () => {
   return (
-    <section id="about" className="py-20 bg-gradient-to-b from-black to-gray-900">
-      <div className="container mx-auto px-6">
+    <section id="about" className="py-32 bg-gradient-to-b from-black to-purple-950/10 relative overflow-hidden">
+      <div className="absolute inset-0 mesh-gradient opacity-20" />
+      
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-20"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+          <motion.div
+            className="inline-block px-4 py-2 glass-effect rounded-full text-sm font-medium text-violet-300 mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
             About Me
+          </motion.div>
+          
+          <h2 className="text-5xl md:text-7xl font-playfair font-bold mb-8 gradient-text">
+            Crafting Digital
+            <br />
+            <span className="text-white/90">Experiences</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            A passionate creator at the intersection of technology, design, and innovation.
-            I craft digital experiences that seamlessly blend functionality with aesthetic appeal.
+          
+          <p className="text-xl text-gray-300 max-w-4xl mx-auto font-inter leading-relaxed">
+            I'm a multidisciplinary creative professional who bridges the gap between 
+            <span className="gradient-text font-medium"> imagination and reality</span> through code, design, and innovation.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="space-y-8"
           >
-            <Card className="bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+            <Card className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-4 text-white">My Journey</h3>
-                <p className="text-gray-300 mb-4">
-                  With over 5 years of experience in the digital realm, I've evolved from a curious 
-                  developer into a multidisciplinary creative professional. My expertise spans across 
-                  frontend development, user experience design, and 3D product visualization.
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 flex items-center justify-center">
+                    <span className="text-xl">🎨</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2 font-space">Creative Vision</h3>
+                    <div className="w-16 h-1 bg-gradient-to-r from-violet-400 to-purple-500 rounded-full" />
+                  </div>
+                </div>
+                <p className="text-gray-300 font-inter leading-relaxed">
+                  Over 5 years of experience transforming complex ideas into elegant, 
+                  user-centered digital solutions that push the boundaries of what's possible.
                 </p>
-                <p className="text-gray-300 mb-4">
-                  I believe in the power of technology to solve real-world problems and create 
-                  meaningful connections between humans and digital interfaces.
+              </CardContent>
+            </Card>
+
+            <Card className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-600 flex items-center justify-center">
+                    <span className="text-xl">⚡</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2 font-space">Technical Excellence</h3>
+                    <div className="w-16 h-1 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full" />
+                  </div>
+                </div>
+                <p className="text-gray-300 font-inter leading-relaxed">
+                  Mastering cutting-edge technologies from React and TypeScript to Three.js and 
+                  advanced shader programming for immersive web experiences.
                 </p>
-                <p className="text-gray-300">
-                  When I'm not coding or designing, you'll find me exploring new 3D modeling 
-                  techniques, studying the latest design trends, or experimenting with emerging 
-                  web technologies.
+              </CardContent>
+            </Card>
+
+            <Card className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500">
+              <CardContent className="p-8">
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 flex items-center justify-center">
+                    <span className="text-xl">🚀</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2 font-space">Innovation Focus</h3>
+                    <div className="w-16 h-1 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full" />
+                  </div>
+                </div>
+                <p className="text-gray-300 font-inter leading-relaxed">
+                  Constantly exploring emerging technologies and design patterns to create 
+                  next-generation digital experiences that inspire and engage.
                 </p>
               </CardContent>
             </Card>
@@ -54,19 +104,41 @@ export const About = () => {
             className="relative"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <div className="relative w-full h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500/20 to-purple-600/20 backdrop-blur-sm border border-gray-700">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-400 to-purple-600 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-white">JD</span>
+            <div className="relative">
+              {/* Main profile card */}
+              <div className="glass-effect rounded-3xl p-8 border border-white/10 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative z-10 text-center">
+                  <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-violet-400 to-purple-600 flex items-center justify-center relative overflow-hidden">
+                    <span className="text-4xl font-bold text-white font-space">AD</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-600 animate-glow" />
                   </div>
-                  <h4 className="text-xl font-bold text-white mb-2">John Doe</h4>
-                  <p className="text-gray-300">Creative Developer</p>
+                  
+                  <h4 className="text-2xl font-bold text-white mb-2 font-space">Alex Designer</h4>
+                  <p className="text-violet-300 mb-4 font-inter">Creative Developer</p>
+                  <p className="text-gray-400 text-sm font-inter">San Francisco, CA</p>
+                  
+                  <div className="mt-6 flex justify-center space-x-4">
+                    <div className="text-center">
+                      <div className="text-lg font-bold gradient-text font-space">150+</div>
+                      <div className="text-xs text-gray-400 font-inter">Happy Clients</div>
+                    </div>
+                    <div className="w-px bg-white/20" />
+                    <div className="text-center">
+                      <div className="text-lg font-bold gradient-text font-space">25+</div>
+                      <div className="text-xs text-gray-400 font-inter">Awards Won</div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              
+              {/* Floating elements */}
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-r from-violet-500/20 to-purple-600/20 rounded-full blur-xl animate-float" />
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-pink-500/20 to-rose-600/20 rounded-full blur-lg animate-float" style={{ animationDelay: '2s' }} />
             </div>
           </motion.div>
         </div>
