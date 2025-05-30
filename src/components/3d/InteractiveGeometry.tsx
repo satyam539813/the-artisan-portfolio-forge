@@ -9,6 +9,7 @@ const STATUE_MODEL_URL = "https://threejs.org/examples/models/gltf/LeePerrySmith
 
 export const InteractiveGeometry = () => {
   const groupRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
   
   // Load the GLTF model with error handling
@@ -26,6 +27,10 @@ export const InteractiveGeometry = () => {
       groupRef.current.rotation.y = state.clock.elapsedTime * 0.3;
       groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
     }
+    if (meshRef.current) {
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
+      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1;
+    }
   });
 
   // If model fails to load, show a fallback geometry
@@ -33,7 +38,7 @@ export const InteractiveGeometry = () => {
     return (
       <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1}>
         <mesh
-          ref={groupRef}
+          ref={meshRef}
           position={[0, 0, 0]}
           onPointerEnter={() => setHovered(true)}
           onPointerLeave={() => setHovered(false)}
