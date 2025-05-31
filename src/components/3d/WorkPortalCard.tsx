@@ -1,7 +1,7 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Text, RenderTexture, PerspectiveCamera, useFBO } from "@react-three/drei";
+import { Text } from "@react-three/drei";
 import * as THREE from "three";
 
 interface WorkPortalCardProps {
@@ -130,9 +130,8 @@ export const WorkPortalCard = ({
         position={[0, -1, 0.11]}
         fontSize={0.2}
         color="white"
-        anchorX="center"
-        anchorY="center"
-        font="/fonts/inter.woff"
+        anchorX="middle"
+        anchorY="middle"
       >
         {title}
       </Text>
@@ -141,10 +140,9 @@ export const WorkPortalCard = ({
         position={[0, -1.3, 0.11]}
         fontSize={0.1}
         color="#a0a0a0"
-        anchorX="center"
-        anchorY="center"
+        anchorX="middle"
+        anchorY="middle"
         maxWidth={1.8}
-        font="/fonts/inter.woff"
       >
         {description}
       </Text>

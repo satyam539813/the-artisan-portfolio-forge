@@ -5,41 +5,26 @@ import { Canvas } from "@react-three/fiber";
 import { DistortionSkillOrb } from "@/components/3d/DistortionSkillOrb";
 import { FloatingOrb } from "@/components/3d/FloatingOrb";
 import { Suspense, useState, useEffect } from "react";
-import { gsap } from "gsap";
-import anime from "animejs";
 
 export const Skills = () => {
   const [hoveredSkill, setHoveredSkill] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   useEffect(() => {
-    // GSAP morphing animations for skill cards
-    gsap.set(".skill-card", { transformOrigin: "center center" });
-    
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
       
-      // Parallax effect with GSAP
-      gsap.to(".skill-card", {
-        duration: 0.3,
-        x: (e.clientX - window.innerWidth / 2) * 0.02,
-        y: (e.clientY - window.innerHeight / 2) * 0.02,
-        rotationY: (e.clientX - window.innerWidth / 2) * 0.01,
-        rotationX: (e.clientY - window.innerHeight / 2) * -0.01,
-        ease: "power2.out"
+      // Simple parallax effect
+      const skillCards = document.querySelectorAll('.skill-card');
+      skillCards.forEach((card) => {
+        const el = card as HTMLElement;
+        const x = (e.clientX - window.innerWidth / 2) * 0.02;
+        const y = (e.clientY - window.innerHeight / 2) * 0.02;
+        el.style.transform = `translate(${x}px, ${y}px)`;
       });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-
-    // Anime.js stagger animations for skill bars
-    anime({
-      targets: '.skill-progress',
-      scaleX: [0, 1],
-      duration: 1500,
-      easing: 'easeOutElastic(1, .5)',
-      delay: anime.stagger(100)
-    });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -172,24 +157,8 @@ export const Skills = () => {
                 stiffness: 100
               }}
               viewport={{ once: true }}
-              onMouseEnter={() => {
-                setHoveredSkill(index);
-                anime({
-                  targets: `.skill-card-${index}`,
-                  scale: [1, 1.05],
-                  duration: 300,
-                  easing: 'easeOutCubic'
-                });
-              }}
-              onMouseLeave={() => {
-                setHoveredSkill(null);
-                anime({
-                  targets: `.skill-card-${index}`,
-                  scale: [1.05, 1],
-                  duration: 300,
-                  easing: 'easeOutCubic'
-                });
-              }}
+              onMouseEnter={() => setHoveredSkill(index)}
+              onMouseLeave={() => setHoveredSkill(null)}
             >
               <Card className={`skill-card-${index} glass-effect border-white/10 h-full hover:border-violet-400/30 transition-all duration-500 group overflow-hidden backdrop-blur-2xl`}>
                 <CardContent className="p-8">

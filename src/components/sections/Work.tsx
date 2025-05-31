@@ -3,28 +3,17 @@ import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { WorkPortalCard } from "@/components/3d/WorkPortalCard";
 import { Suspense, useState, useEffect } from "react";
-import { gsap } from "gsap";
-import anime from "animejs";
 
 export const Work = () => {
   const [hoveredWork, setHoveredWork] = useState<number | null>(null);
   
   useEffect(() => {
-    // GSAP timeline for section entrance
-    const tl = gsap.timeline();
-    tl.from(".work-title", { duration: 1, y: 100, opacity: 0, ease: "power3.out" })
-      .from(".work-subtitle", { duration: 0.8, y: 50, opacity: 0, ease: "power2.out" }, "-=0.5")
-      .from(".work-canvas", { duration: 1.2, scale: 0.8, opacity: 0, ease: "elastic.out(1, 0.5)" }, "-=0.3");
-
-    // Anime.js micro interactions for floating elements
-    anime({
-      targets: '.floating-element',
-      translateY: [-20, 20],
-      duration: 3000,
-      easing: 'easeInOutSine',
-      direction: 'alternate',
-      loop: true,
-      delay: anime.stagger(500)
+    // Simple animations without external libraries
+    const floatingElements = document.querySelectorAll('.floating-element');
+    floatingElements.forEach((element, index) => {
+      const el = element as HTMLElement;
+      el.style.animation = `float 3s ease-in-out infinite`;
+      el.style.animationDelay = `${index * 0.5}s`;
     });
   }, []);
 
@@ -70,7 +59,7 @@ export const Work = () => {
     <section id="work" className="py-32 bg-gradient-to-b from-black via-purple-950/10 to-black relative overflow-hidden min-h-screen">
       <div className="absolute inset-0 mesh-gradient opacity-30" />
       
-      {/* Floating elements for anime.js */}
+      {/* Floating elements */}
       <div className="floating-element absolute top-20 left-10 w-16 h-16 bg-gradient-to-r from-violet-500/30 to-purple-600/30 rounded-full blur-lg" />
       <div className="floating-element absolute bottom-32 right-16 w-20 h-20 bg-gradient-to-r from-pink-500/30 to-rose-600/30 rounded-full blur-xl" />
       <div className="floating-element absolute top-1/2 left-1/4 w-12 h-12 bg-gradient-to-r from-blue-500/30 to-cyan-600/30 rounded-full blur-md" />
@@ -155,6 +144,13 @@ export const Work = () => {
           ))}
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+      `}</style>
     </section>
   );
 };
