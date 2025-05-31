@@ -1,7 +1,6 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Float, Sphere } from "@react-three/drei";
 import * as THREE from "three";
 
 interface SkillOrbProps {
@@ -19,6 +18,9 @@ export const SkillOrb = ({ position, color, skill, hovered }: SkillOrbProps) => 
     if (groupRef.current) {
       groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.3;
       groupRef.current.scale.setScalar(hovered ? 1.2 : 1);
+      
+      // Add floating animation
+      groupRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 1.5 + position[0]) * 0.2;
     }
     
     if (materialRef.current) {
@@ -28,19 +30,18 @@ export const SkillOrb = ({ position, color, skill, hovered }: SkillOrbProps) => 
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.8}>
-      <group ref={groupRef} position={position}>
-        <Sphere args={[0.4, 32, 32]}>
-          <meshStandardMaterial
-            ref={materialRef}
-            color={color}
-            metalness={0.8}
-            roughness={0.2}
-            transparent
-            opacity={0.8}
-          />
-        </Sphere>
-      </group>
-    </Float>
+    <group ref={groupRef} position={position}>
+      <mesh>
+        <sphereGeometry args={[0.4, 32, 32]} />
+        <meshStandardMaterial
+          ref={materialRef}
+          color={color}
+          metalness={0.8}
+          roughness={0.2}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+    </group>
   );
 };
