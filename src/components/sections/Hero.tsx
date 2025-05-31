@@ -51,7 +51,7 @@ export const Hero = () => {
             <span className="block text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text animate-gradient-shift">
               Creative
             </span>
-            <span className="block text-white/90 font-space font-light">
+            <span className="block text-white font-space font-light mix-blend-difference bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent animate-pulse">
               Developer
             </span>
           </motion.h1>
