@@ -169,7 +169,7 @@ export const WorkPortalCard = ({
         fontSize={0.18}
         color="white"
         anchorX="center"
-        anchorY="center"
+        anchorY="middle"
         font="/fonts/inter.woff"
       >
         {title}
@@ -180,7 +180,7 @@ export const WorkPortalCard = ({
         fontSize={0.08}
         color="#a0a0a0"
         anchorX="center"
-        anchorY="center"
+        anchorY="middle"
         maxWidth={2}
         font="/fonts/inter.woff"
       >
