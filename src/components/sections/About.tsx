@@ -1,11 +1,45 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
+import { Canvas } from "@react-three/fiber";
+import { Interactive3DCard } from "@/components/3d/Interactive3DCard";
+import { FloatingOrb } from "@/components/3d/FloatingOrb";
+import { Environment } from "@react-three/drei";
+import { Suspense, useState } from "react";
 
 export const About = () => {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
   return (
     <section id="about" className="py-32 bg-gradient-to-b from-black to-purple-950/10 relative overflow-hidden">
       <div className="absolute inset-0 mesh-gradient opacity-20" />
+      
+      {/* 3D Background */}
+      <div className="absolute inset-0 opacity-30">
+        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+          <Suspense fallback={null}>
+            <Environment preset="city" />
+            <Interactive3DCard 
+              position={[-3, 2, -2]} 
+              color="#8b5cf6" 
+              hovered={hoveredCard === 0}
+            />
+            <Interactive3DCard 
+              position={[3, -1, -1]} 
+              color="#06b6d4" 
+              hovered={hoveredCard === 1}
+            />
+            <Interactive3DCard 
+              position={[-2, -2, -3]} 
+              color="#ec4899" 
+              hovered={hoveredCard === 2}
+            />
+            <FloatingOrb position={[4, 3, -2]} color="#8b5cf6" speed={1.2} />
+            <FloatingOrb position={[-4, 1, -1]} color="#06b6d4" speed={0.8} />
+            <FloatingOrb position={[2, -3, -2]} color="#ec4899" speed={1.5} />
+          </Suspense>
+        </Canvas>
+      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -45,10 +79,14 @@ export const About = () => {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <Card className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500">
+            <Card 
+              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500"
+              onMouseEnter={() => setHoveredCard(0)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
               <CardContent className="p-8">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
                     <span className="text-xl">🎨</span>
                   </div>
                   <div>
@@ -63,10 +101,14 @@ export const About = () => {
               </CardContent>
             </Card>
 
-            <Card className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500">
+            <Card 
+              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500"
+              onMouseEnter={() => setHoveredCard(1)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
               <CardContent className="p-8">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-600 flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
                     <span className="text-xl">⚡</span>
                   </div>
                   <div>
@@ -81,10 +123,14 @@ export const About = () => {
               </CardContent>
             </Card>
 
-            <Card className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500">
+            <Card 
+              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500"
+              onMouseEnter={() => setHoveredCard(2)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
               <CardContent className="p-8">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
                     <span className="text-xl">🚀</span>
                   </div>
                   <div>

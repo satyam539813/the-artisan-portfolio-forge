@@ -48,11 +48,11 @@ export const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.4 }}
           >
-            <span className="block gradient-text animate-gradient-shift">
-              Digital
+            <span className="block text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text animate-gradient-shift">
+              Creative
             </span>
             <span className="block text-white/90 font-space font-light">
-              Artisan
+              Developer
             </span>
           </motion.h1>
           
@@ -63,8 +63,8 @@ export const Hero = () => {
             transition={{ duration: 1, delay: 0.8 }}
           >
             Crafting immersive digital experiences through the fusion of 
-            <span className="gradient-text font-medium"> cutting-edge technology</span> and 
-            <span className="gradient-text font-medium"> artistic vision</span>
+            <span className="text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text font-medium"> cutting-edge technology</span> and 
+            <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text font-medium"> artistic vision</span>
           </motion.p>
           
           <motion.div

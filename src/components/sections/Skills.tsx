@@ -1,8 +1,15 @@
 
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
+import { Canvas } from "@react-three/fiber";
+import { SkillOrb } from "@/components/3d/SkillOrb";
+import { FloatingOrb } from "@/components/3d/FloatingOrb";
+import { Environment } from "@react-three/drei";
+import { Suspense, useState } from "react";
 
 export const Skills = () => {
+  const [hoveredSkill, setHoveredSkill] = useState<number | null>(null);
+  
   const skillCategories = [
     {
       title: "Frontend Mastery",
@@ -45,9 +52,37 @@ export const Skills = () => {
     }
   ];
 
+  const skillOrbs = [
+    { position: [-2, 1, 0] as [number, number, number], color: "#8b5cf6", skill: "React" },
+    { position: [2, -1, 1] as [number, number, number], color: "#06b6d4", skill: "Three.js" },
+    { position: [0, 2, -1] as [number, number, number], color: "#ec4899", skill: "Design" },
+    { position: [-3, -1, -2] as [number, number, number], color: "#10b981", skill: "Animation" },
+    { position: [3, 1, -1] as [number, number, number], color: "#f59e0b", skill: "TypeScript" }
+  ];
+
   return (
     <section id="skills" className="py-32 bg-gradient-to-b from-purple-950/10 to-black relative overflow-hidden">
       <div className="absolute inset-0 mesh-gradient opacity-20" />
+      
+      {/* 3D Background */}
+      <div className="absolute inset-0 opacity-40">
+        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+          <Suspense fallback={null}>
+            <Environment preset="night" />
+            {skillOrbs.map((orb, index) => (
+              <SkillOrb
+                key={index}
+                position={orb.position}
+                color={orb.color}
+                skill={orb.skill}
+                hovered={hoveredSkill === index}
+              />
+            ))}
+            <FloatingOrb position={[4, 2, -3]} color="#8b5cf6" speed={0.8} scale={0.7} />
+            <FloatingOrb position={[-4, -2, -2]} color="#06b6d4" speed={1.2} scale={0.5} />
+          </Suspense>
+        </Canvas>
+      </div>
       
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
@@ -87,8 +122,10 @@ export const Skills = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
               viewport={{ once: true }}
+              onMouseEnter={() => setHoveredSkill(index)}
+              onMouseLeave={() => setHoveredSkill(null)}
             >
-              <Card className="glass-effect border-white/10 h-full hover:border-violet-400/30 transition-all duration-500 group overflow-hidden">
+              <Card className="glass-effect border-white/10 h-full hover:border-violet-400/30 transition-all duration-500 group overflow-hidden transform hover:scale-105">
                 <CardContent className="p-8">
                   <div className="text-center mb-8">
                     <div className="text-4xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
@@ -107,6 +144,7 @@ export const Skills = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6, delay: (index * 0.2) + (skillIndex * 0.1) }}
                         viewport={{ once: true }}
+                        whileHover={{ x: 5 }}
                       >
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-gray-300 font-inter font-medium">{skill.name}</span>
@@ -119,6 +157,7 @@ export const Skills = () => {
                             whileInView={{ width: `${skill.level}%` }}
                             transition={{ duration: 1.5, delay: (index * 0.2) + (skillIndex * 0.1) + 0.5 }}
                             viewport={{ once: true }}
+                            whileHover={{ scaleY: 1.2 }}
                           >
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-glow" />
                           </motion.div>
