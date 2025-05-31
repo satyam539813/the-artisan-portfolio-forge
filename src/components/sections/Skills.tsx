@@ -4,11 +4,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Canvas } from "@react-three/fiber";
 import { SkillOrb } from "@/components/3d/SkillOrb";
 import { FloatingOrb } from "@/components/3d/FloatingOrb";
-import { Environment } from "@react-three/drei";
 import { Suspense, useState } from "react";
 
 export const Skills = () => {
   const [hoveredSkill, setHoveredSkill] = useState<number | null>(null);
+  
+  console.log("Skills component rendering, hoveredSkill:", hoveredSkill);
   
   const skillCategories = [
     {
@@ -68,7 +69,8 @@ export const Skills = () => {
       <div className="absolute inset-0 opacity-40">
         <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
           <Suspense fallback={null}>
-            <Environment preset="night" />
+            <ambientLight intensity={0.3} />
+            <pointLight position={[10, 10, 10]} />
             {skillOrbs.map((orb, index) => (
               <SkillOrb
                 key={index}

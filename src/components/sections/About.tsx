@@ -4,11 +4,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Canvas } from "@react-three/fiber";
 import { Interactive3DCard } from "@/components/3d/Interactive3DCard";
 import { FloatingOrb } from "@/components/3d/FloatingOrb";
-import { Environment } from "@react-three/drei";
 import { Suspense, useState } from "react";
 
 export const About = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
+  console.log("About component rendering, hoveredCard:", hoveredCard);
 
   return (
     <section id="about" className="py-32 bg-gradient-to-b from-black to-purple-950/10 relative overflow-hidden">
@@ -18,7 +19,8 @@ export const About = () => {
       <div className="absolute inset-0 opacity-30">
         <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
           <Suspense fallback={null}>
-            <Environment preset="city" />
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
             <Interactive3DCard 
               position={[-3, 2, -2]} 
               color="#8b5cf6" 

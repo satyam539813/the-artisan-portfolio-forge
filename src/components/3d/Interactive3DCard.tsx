@@ -26,15 +26,14 @@ export const Interactive3DCard = ({ position, color, text, hovered }: Interactiv
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
       <mesh ref={meshRef} position={position}>
         <boxGeometry args={[0.8, 0.8, 0.1]} />
-        <MeshDistortMaterial
+        <meshStandardMaterial
           color={color}
-          attach="material"
-          distort={hovered ? 0.3 : 0.1}
-          speed={2}
-          roughness={0.1}
           metalness={0.8}
+          roughness={0.1}
           transparent
           opacity={0.8}
+          emissive={color}
+          emissiveIntensity={hovered ? 0.2 : 0.1}
         />
       </mesh>
     </Float>
