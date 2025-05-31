@@ -59,15 +59,15 @@ export const About = () => {
             About Me
           </motion.div>
           
-          <h2 className="text-5xl md:text-7xl font-playfair font-bold mb-8 gradient-text">
-            Crafting Digital
+          <h2 className="text-5xl md:text-7xl font-playfair font-bold mb-8">
+            <span className="gradient-text">Passionate</span>
             <br />
-            <span className="text-white/90">Experiences</span>
+            <span className="text-white/90">Creator</span>
           </h2>
           
           <p className="text-xl text-gray-300 max-w-4xl mx-auto font-inter leading-relaxed">
-            I'm a multidisciplinary creative professional who bridges the gap between 
-            <span className="gradient-text font-medium"> imagination and reality</span> through code, design, and innovation.
+            Combining technical expertise with creative vision to build digital experiences 
+            that inspire, engage, and deliver exceptional results.
           </p>
         </motion.div>
 
@@ -147,45 +147,43 @@ export const About = () => {
           </motion.div>
 
           <motion.div
-            className="relative"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
+            className="relative"
           >
-            <div className="relative">
-              {/* Main profile card */}
-              <div className="glass-effect rounded-3xl p-8 border border-white/10 relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="relative z-10 text-center">
-                  <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-violet-400 to-purple-600 flex items-center justify-center relative overflow-hidden">
-                    <span className="text-4xl font-bold text-white font-space">AD</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-purple-600 animate-glow" />
-                  </div>
-                  
-                  <h4 className="text-2xl font-bold text-white mb-2 font-space">Alex Designer</h4>
-                  <p className="text-violet-300 mb-4 font-inter">Creative Developer</p>
-                  <p className="text-gray-400 text-sm font-inter">San Francisco, CA</p>
-                  
-                  <div className="mt-6 flex justify-center space-x-4">
-                    <div className="text-center">
-                      <div className="text-lg font-bold gradient-text font-space">150+</div>
-                      <div className="text-xs text-gray-400 font-inter">Happy Clients</div>
+            <Card className="glass-effect border-white/10 overflow-hidden">
+              <CardContent className="p-0">
+                <div className="relative h-96 bg-gradient-to-br from-violet-500/20 via-purple-600/20 to-pink-500/20 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-violet-400 to-purple-600 flex items-center justify-center text-4xl">
+                      👨‍💻
                     </div>
-                    <div className="w-px bg-white/20" />
-                    <div className="text-center">
-                      <div className="text-lg font-bold gradient-text font-space">25+</div>
-                      <div className="text-xs text-gray-400 font-inter">Awards Won</div>
-                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2 font-space">John Doe</h3>
+                    <p className="text-violet-300 font-inter">Creative Developer</p>
                   </div>
                 </div>
-              </div>
-              
-              {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-r from-violet-500/20 to-purple-600/20 rounded-full blur-xl animate-float" />
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-r from-pink-500/20 to-rose-600/20 rounded-full blur-lg animate-float" style={{ animationDelay: '2s' }} />
-            </div>
+                <div className="p-8">
+                  <p className="text-gray-300 font-inter leading-relaxed mb-6">
+                    "I believe in the power of design and technology to create meaningful connections 
+                    between people and digital experiences. Every project is an opportunity to push 
+                    creative boundaries."
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <span className="px-3 py-1 bg-violet-500/20 text-violet-300 rounded-full text-sm font-inter">
+                      Frontend Development
+                    </span>
+                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-inter">
+                      UI/UX Design
+                    </span>
+                    <span className="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm font-inter">
+                      3D Visualization
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
       </div>

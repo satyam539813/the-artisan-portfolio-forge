@@ -1,7 +1,7 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Float, Text, Sphere } from "@react-three/drei";
+import { Float, Sphere } from "@react-three/drei";
 import * as THREE from "three";
 
 interface SkillOrbProps {
@@ -40,18 +40,6 @@ export const SkillOrb = ({ position, color, skill, hovered }: SkillOrbProps) => 
             opacity={0.8}
           />
         </Sphere>
-        {hovered && (
-          <Text
-            position={[0, 0.7, 0]}
-            fontSize={0.15}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-            font="/fonts/inter-bold.woff"
-          >
-            {skill}
-          </Text>
-        )}
       </group>
     </Float>
   );
