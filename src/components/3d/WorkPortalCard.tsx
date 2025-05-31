@@ -12,6 +12,7 @@ interface WorkPortalCardProps {
   color: string;
   index: number;
   hovered: boolean;
+  imageUrl?: string;
 }
 
 export const WorkPortalCard = ({ 
@@ -21,11 +22,13 @@ export const WorkPortalCard = ({
   description, 
   color, 
   index,
-  hovered 
+  hovered,
+  imageUrl = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
 }: WorkPortalCardProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const portalRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
+  const imageRef = useRef<THREE.Mesh>(null);
   
   // Create portal shader material
   const portalMaterial = useMemo(() => {
@@ -80,6 +83,20 @@ export const WorkPortalCard = ({
     });
   }, [color, hovered]);
 
+  // Glass morphism material
+  const glassMaterial = useMemo(() => {
+    return new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      transmission: 0.9,
+      opacity: 0.3,
+      roughness: 0.1,
+      metalness: 0,
+      clearcoat: 1,
+      clearcoatRoughness: 0.1,
+      transparent: true
+    });
+  }, []);
+
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5 + index) * 0.1;
@@ -91,11 +108,18 @@ export const WorkPortalCard = ({
     }
     
     if (groupRef.current) {
-      // Cylindrical rotation around Y axis
-      const angle = (index / 5) * Math.PI * 2 + state.clock.elapsedTime * 0.2;
-      groupRef.current.position.x = Math.cos(angle) * 4;
-      groupRef.current.position.z = Math.sin(angle) * 4;
+      // Enhanced cylindrical rotation with smooth rolling effect
+      const radius = 5;
+      const angle = (index / 5) * Math.PI * 2 + state.clock.elapsedTime * 0.3;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const y = Math.sin(state.clock.elapsedTime * 0.2 + index) * 0.5;
+      
+      groupRef.current.position.set(x, y, z);
       groupRef.current.rotation.y = angle + Math.PI;
+      
+      // Add rolling rotation
+      groupRef.current.rotation.z = -angle * 0.5;
     }
 
     // Update portal shader
@@ -107,9 +131,9 @@ export const WorkPortalCard = ({
 
   return (
     <group ref={groupRef} position={position} rotation={rotation}>
-      {/* Main card */}
+      {/* Main card with image */}
       <mesh ref={meshRef}>
-        <boxGeometry args={[2, 2.5, 0.1]} />
+        <boxGeometry args={[2.5, 3, 0.15]} />
         <meshStandardMaterial
           color={color}
           metalness={0.8}
@@ -119,30 +143,46 @@ export const WorkPortalCard = ({
         />
       </mesh>
       
+      {/* Image plane */}
+      <mesh ref={imageRef} position={[0, 0.3, 0.08]}>
+        <planeGeometry args={[2.2, 1.5]} />
+        <meshBasicMaterial>
+          <primitive attach="map" object={new THREE.TextureLoader().load(imageUrl)} />
+        </meshBasicMaterial>
+      </mesh>
+      
+      {/* Glass morphism overlay in corner */}
+      <mesh position={[0.8, 1.2, 0.09]}>
+        <circleGeometry args={[0.3, 16]} />
+        <primitive object={glassMaterial} attach="material" />
+      </mesh>
+      
       {/* Portal effect in center */}
-      <mesh ref={portalRef} position={[0, 0, 0.06]}>
-        <circleGeometry args={[0.8, 32]} />
+      <mesh ref={portalRef} position={[0, -0.3, 0.1]}>
+        <circleGeometry args={[0.6, 32]} />
         <primitive object={portalMaterial} attach="material" />
       </mesh>
       
       {/* Card content */}
       <Text
-        position={[0, -1, 0.11]}
-        fontSize={0.2}
+        position={[0, -1.2, 0.11]}
+        fontSize={0.18}
         color="white"
-        anchorX="middle"
-        anchorY="middle"
+        anchorX="center"
+        anchorY="center"
+        font="/fonts/inter.woff"
       >
         {title}
       </Text>
       
       <Text
-        position={[0, -1.3, 0.11]}
-        fontSize={0.1}
+        position={[0, -1.5, 0.11]}
+        fontSize={0.08}
         color="#a0a0a0"
-        anchorX="middle"
-        anchorY="middle"
-        maxWidth={1.8}
+        anchorX="center"
+        anchorY="center"
+        maxWidth={2}
+        font="/fonts/inter.woff"
       >
         {description}
       </Text>

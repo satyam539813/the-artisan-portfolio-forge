@@ -82,7 +82,7 @@ export const About = () => {
             className="space-y-8"
           >
             <Card 
-              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500"
+              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500 transform hover:scale-105 hover:rotate-1"
               onMouseEnter={() => setHoveredCard(0)}
               onMouseLeave={() => setHoveredCard(null)}
             >
@@ -93,7 +93,7 @@ export const About = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-2 font-space">Creative Vision</h3>
-                    <div className="w-16 h-1 bg-gradient-to-r from-violet-400 to-purple-500 rounded-full" />
+                    <div className="w-16 h-1 bg-gradient-to-r from-violet-400 to-purple-500 rounded-full group-hover:w-24 transition-all duration-300" />
                   </div>
                 </div>
                 <p className="text-gray-300 font-inter leading-relaxed">
@@ -104,7 +104,7 @@ export const About = () => {
             </Card>
 
             <Card 
-              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500"
+              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500 transform hover:scale-105 hover:-rotate-1"
               onMouseEnter={() => setHoveredCard(1)}
               onMouseLeave={() => setHoveredCard(null)}
             >
@@ -115,7 +115,7 @@ export const About = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-2 font-space">Technical Excellence</h3>
-                    <div className="w-16 h-1 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full" />
+                    <div className="w-16 h-1 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full group-hover:w-24 transition-all duration-300" />
                   </div>
                 </div>
                 <p className="text-gray-300 font-inter leading-relaxed">
@@ -126,7 +126,7 @@ export const About = () => {
             </Card>
 
             <Card 
-              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500"
+              className="glass-effect border-white/10 overflow-hidden group hover:border-violet-400/30 transition-all duration-500 transform hover:scale-105 hover:rotate-1"
               onMouseEnter={() => setHoveredCard(2)}
               onMouseLeave={() => setHoveredCard(null)}
             >
@@ -137,7 +137,7 @@ export const About = () => {
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-2 font-space">Innovation Focus</h3>
-                    <div className="w-16 h-1 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full" />
+                    <div className="w-16 h-1 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full group-hover:w-24 transition-all duration-300" />
                   </div>
                 </div>
                 <p className="text-gray-300 font-inter leading-relaxed">
@@ -155,11 +155,13 @@ export const About = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <Card className="glass-effect border-white/10 overflow-hidden">
+            <Card className="glass-effect border-white/10 overflow-hidden hover:border-violet-400/30 transition-all duration-500 transform hover:scale-102">
               <CardContent className="p-0">
-                <div className="relative h-96 bg-gradient-to-br from-violet-500/20 via-purple-600/20 to-pink-500/20 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-violet-400 to-purple-600 flex items-center justify-center text-4xl">
+                <div className="relative h-96 bg-gradient-to-br from-violet-500/20 via-purple-600/20 to-pink-500/20 flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1649972904349-6e44c42644a7')] bg-cover bg-center opacity-30" />
+                  <div className="absolute inset-0 backdrop-blur-sm bg-gradient-to-br from-violet-500/10 to-pink-500/10" />
+                  <div className="text-center relative z-10">
+                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-violet-400 to-purple-600 flex items-center justify-center text-4xl transform hover:rotate-12 transition-transform duration-300">
                       👨‍💻
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2 font-space">John Doe</h3>
@@ -173,13 +175,13 @@ export const About = () => {
                     creative boundaries."
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    <span className="px-3 py-1 bg-violet-500/20 text-violet-300 rounded-full text-sm font-inter">
+                    <span className="px-3 py-1 bg-violet-500/20 text-violet-300 rounded-full text-sm font-inter hover:bg-violet-500/30 transition-colors duration-300">
                       Frontend Development
                     </span>
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-inter">
+                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-inter hover:bg-blue-500/30 transition-colors duration-300">
                       UI/UX Design
                     </span>
-                    <span className="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm font-inter">
+                    <span className="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm font-inter hover:bg-pink-500/30 transition-colors duration-300">
                       3D Visualization
                     </span>
                   </div>
