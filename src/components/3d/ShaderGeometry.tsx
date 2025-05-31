@@ -1,13 +1,18 @@
 
 import { useRef, useMemo } from "react";
-import { useFrame, extend } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { Float, Environment, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
-// Custom shader material
-class WaveShaderMaterial extends THREE.ShaderMaterial {
-  constructor() {
-    super({
+export const ShaderGeometry = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
+  
+  const geometry = useMemo(() => new THREE.SphereGeometry(1.5, 64, 64), []);
+
+  // Create shader material with useMemo to prevent recreation
+  const shaderMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
       vertexShader: `
         uniform float time;
         uniform float intensity;
@@ -52,20 +57,11 @@ class WaveShaderMaterial extends THREE.ShaderMaterial {
       transparent: true,
       side: THREE.DoubleSide
     });
-  }
-}
-
-extend({ WaveShaderMaterial });
-
-export const ShaderGeometry = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const shaderRef = useRef<WaveShaderMaterial>(null);
-  
-  const geometry = useMemo(() => new THREE.SphereGeometry(1.5, 64, 64), []);
+  }, []);
 
   useFrame((state) => {
-    if (shaderRef.current) {
-      shaderRef.current.uniforms.time.value = state.clock.elapsedTime;
+    if (materialRef.current) {
+      materialRef.current.uniforms.time.value = state.clock.elapsedTime;
     }
     
     if (meshRef.current) {
@@ -78,8 +74,8 @@ export const ShaderGeometry = () => {
     <>
       <Environment preset="city" />
       <Float speed={2} rotationIntensity={0.3} floatIntensity={0.8}>
-        <mesh ref={meshRef} geometry={geometry}>
-          <waveShaderMaterial ref={shaderRef} />
+        <mesh ref={meshRef} geometry={geometry} material={shaderMaterial}>
+          <primitive object={shaderMaterial} ref={materialRef} attach="material" />
         </mesh>
       </Float>
       
@@ -114,11 +110,3 @@ export const ShaderGeometry = () => {
     </>
   );
 };
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      waveShaderMaterial: any;
-    }
-  }
-}
