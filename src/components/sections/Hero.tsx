@@ -1,10 +1,10 @@
 
-import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
 import { WaterShader } from "@/components/3d/WaterShader";
 import { FloatingText } from "@/components/3d/FloatingText";
 import { Suspense, useState, useEffect } from "react";
-import { Html, Environment } from "@react-three/drei";
+import { OrbitControls, Environment } from "@react-three/drei";
 
 export const Hero = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -13,7 +13,7 @@ export const Hero = () => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1
+        y: -(e.clientY / window.innerHeight) * 2 + 1,
       });
     };
 
@@ -22,12 +22,12 @@ export const Hero = () => {
   }, []);
 
   return (
-    <section className="relative h-screen overflow-hidden bg-gradient-to-br from-black via-purple-950/20 to-black">
-      {/* 3D Water Shader Background */}
+    <section className="relative h-screen overflow-hidden bg-black">
+      {/* 3D Canvas Background */}
       <div className="absolute inset-0">
         <Canvas
           camera={{ 
-            position: [0, 0, 5], 
+            position: [0, 2, 8], 
             fov: 75,
             near: 0.1,
             far: 1000
@@ -40,109 +40,96 @@ export const Hero = () => {
         >
           <Suspense fallback={null}>
             <Environment preset="night" />
-            <ambientLight intensity={0.2} />
-            <pointLight position={[10, 10, 10]} intensity={0.5} color="#8b5cf6" />
-            <pointLight position={[-10, -10, -10]} intensity={0.3} color="#ec4899" />
+            <fog attach="fog" args={['#000000', 10, 50]} />
+            
+            {/* Lighting */}
+            <ambientLight intensity={0.4} color="#1e1b4b" />
+            <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
+            <pointLight position={[-10, 5, -10]} intensity={0.5} color="#8b5cf6" />
+            <pointLight position={[10, -5, 10]} intensity={0.5} color="#06b6d4" />
+            
+            <OrbitControls 
+              enableZoom={false} 
+              enablePan={false} 
+              enableRotate={false}
+              autoRotate={false}
+            />
             
             <WaterShader mousePosition={mousePosition} />
-            <FloatingText 
-              text="Satyam Kumar" 
-              position={[0, 1, 2]} 
-              mousePosition={mousePosition}
-            />
+            <FloatingText />
           </Suspense>
         </Canvas>
       </div>
 
       {/* Overlay Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
         <motion.div
-          className="text-center max-w-4xl mx-auto"
-          initial={{ opacity: 0, y: 100 }}
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, delay: 0.5 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <motion.div
-            className="mb-8"
+          <motion.h1 
+            className="text-6xl md:text-8xl font-bold mb-6"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 1 }}
+            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
           >
-            <span className="inline-block px-6 py-3 glass-effect rounded-full text-lg font-medium text-cyan-300 border border-cyan-500/30">
-              ✨ 3D Product Designer & Frontend Developer
-            </span>
-          </motion.div>
-          
-          <motion.h1
-            className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 leading-none"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 1.2 }}
-          >
-            <span className="block text-transparent bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text animate-pulse">
-              Digital
-            </span>
-            <span className="block text-white/90 font-light">
-              Architect
-            </span>
+            <span className="gradient-text">Hi, I'm</span>
+            <br />
+            <span className="text-white">Satyam Kumar</span>
           </motion.h1>
           
-          <motion.p
-            className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+          <motion.p 
+            className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.8 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
           >
-            Crafting immersive digital experiences where 
-            <span className="text-transparent bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text font-medium"> cutting-edge technology</span> meets 
-            <span className="text-transparent bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text font-medium"> artistic vision</span>
+            3D Product Designer & Frontend Developer crafting immersive digital experiences
           </motion.p>
           
           <motion.div
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 2.2 }}
+            transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
           >
-            <motion.a
-              href="#projects"
-              className="group relative px-8 py-4 glass-effect rounded-full text-white font-medium text-lg overflow-hidden transition-all duration-300"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="relative z-10">Explore My Universe</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </motion.a>
-            
-            <motion.a
-              href="#contact"
-              className="group px-8 py-4 border border-white/20 rounded-full text-gray-300 hover:text-white font-medium text-lg transition-all duration-300 hover:border-cyan-400/50"
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="flex items-center gap-2">
-                Connect With Me
-                <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
-              </span>
-            </motion.a>
+            <button className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white rounded-xl hover:from-cyan-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+              View My Work
+            </button>
+            <button className="px-8 py-4 border border-white/20 text-white rounded-xl hover:bg-white/10 transition-all duration-300">
+              Get In Touch
+            </button>
           </motion.div>
         </motion.div>
-        
+
         {/* Scroll Indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 3 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
         >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs text-gray-400">Scroll to explore</span>
-            <div className="w-6 h-10 border border-white/20 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-gradient-to-b from-cyan-400 to-transparent rounded-full mt-2 animate-bounce" />
-            </div>
+          <div className="flex flex-col items-center text-white/60">
+            <span className="text-sm mb-2">Scroll to Explore</span>
+            <motion.div
+              className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <motion.div
+                className="w-1 h-3 bg-white/60 rounded-full mt-2"
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.div>
           </div>
         </motion.div>
       </div>
+
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/60 pointer-events-none" />
     </section>
   );
 };

@@ -6,57 +6,57 @@ export const LoadingScreen = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
-          clearInterval(interval);
+          clearInterval(timer);
           return 100;
         }
-        return prev + Math.random() * 15;
+        return prev + 2;
       });
-    }, 150);
+    }, 50);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
   }, []);
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black z-50 flex items-center justify-center"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="text-center">
-        <motion.div
-          className="text-6xl md:text-8xl font-bold mb-8"
-          initial={{ opacity: 0, y: 50 }}
+        <motion.h1
+          className="text-4xl md:text-6xl font-bold gradient-text mb-8"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="gradient-text">SK</span>
-        </motion.div>
+          Satyam Kumar
+        </motion.h1>
         
         <motion.div
-          className="w-64 h-1 bg-gray-800 rounded-full overflow-hidden mx-auto mb-4"
+          className="w-64 h-1 bg-gray-800 rounded-full mx-auto mb-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
         >
           <motion.div
-            className="h-full bg-gradient-to-r from-cyan-400 to-purple-500"
+            className="h-full bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           />
         </motion.div>
         
         <motion.p
-          className="text-gray-400 text-sm"
+          className="text-gray-400"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
         >
-          Entering the Digital Universe...
+          Loading Portfolio... {progress}%
         </motion.p>
       </div>
     </motion.div>
