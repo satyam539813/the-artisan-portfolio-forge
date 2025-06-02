@@ -12,7 +12,7 @@ export const Work = () => {
       title: "Neural Interface Dashboard",
       description: "Advanced AI-powered brain-computer interface visualization platform with real-time neural signal processing and intuitive gesture controls.",
       color: "#8b5cf6",
-      imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+      imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=250&fit=crop",
       category: "AI & Machine Learning",
       techStack: ["React", "Three.js", "WebGL", "TensorFlow"],
       liveDemo: "#",
@@ -22,7 +22,7 @@ export const Work = () => {
       title: "Quantum Visualization Lab",
       description: "Interactive quantum mechanics simulation environment exploring quantum entanglement and superposition states through immersive 3D visualizations.",
       color: "#06b6d4",
-      imageUrl: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      imageUrl: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=250&fit=crop",
       category: "3D Visualization",
       techStack: ["Three.js", "WebGL", "Physics", "React"],
       liveDemo: "#",
@@ -32,7 +32,7 @@ export const Work = () => {
       title: "Digital DNA Explorer",
       description: "Comprehensive genetic data visualization platform analyzing DNA patterns and molecular structures with advanced algorithms.",
       color: "#ec4899",
-      imageUrl: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+      imageUrl: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=250&fit=crop",
       category: "Data Visualization",
       techStack: ["React", "D3.js", "WebGL", "Bioinformatics"],
       liveDemo: "#",
@@ -42,7 +42,7 @@ export const Work = () => {
       title: "Cosmic Data Observatory",
       description: "Real-time space exploration tool for navigating galaxies and analyzing celestial phenomena using astronomical datasets.",
       color: "#10b981",
-      imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+      imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=250&fit=crop",
       category: "3D Visualization",
       techStack: ["Three.js", "React", "NASA APIs", "WebGL"],
       liveDemo: "#",
@@ -52,7 +52,7 @@ export const Work = () => {
       title: "Temporal Design Studio",
       description: "Revolutionary 4D temporal data manipulation interface for visualizing time-series data and predicting future trends.",
       color: "#f59e0b",
-      imageUrl: "https://images.unsplash.com/photo-1527576539890-dfa815648363",
+      imageUrl: "https://images.unsplash.com/photo-1527576539890-dfa815648363?w=400&h=250&fit=crop",
       category: "Web Development",
       techStack: ["React", "Three.js", "TensorFlow.js", "WebGL"],
       liveDemo: "#",
@@ -101,6 +101,15 @@ export const Work = () => {
             <motion.div
               key={index}
               className="group relative glass-effect rounded-2xl border border-white/10 overflow-hidden cursor-pointer hover:border-violet-400/50 transition-all duration-500"
+              style={{
+                transform: hoveredWork === index 
+                  ? 'perspective(1000px) rotateX(2deg) rotateY(-2deg) scale(1.02)' 
+                  : 'perspective(1000px) rotateX(1deg) rotateY(-1deg)',
+                boxShadow: hoveredWork === index 
+                  ? 'inset 0 2px 10px rgba(139, 92, 246, 0.3), 0 20px 40px rgba(0, 0, 0, 0.4)'
+                  : 'inset 0 1px 5px rgba(255, 255, 255, 0.1), 0 10px 20px rgba(0, 0, 0, 0.2)',
+                height: '420px'
+              }}
               onMouseEnter={() => setHoveredWork(index)}
               onMouseLeave={() => setHoveredWork(null)}
               onClick={() => setSelectedWork(index)}
@@ -108,15 +117,17 @@ export const Work = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.02, y: -10 }}
             >
-              {/* Project Image */}
-              <div className="relative h-64 overflow-hidden">
+              {/* Project Thumbnail */}
+              <div className="relative h-48 overflow-hidden">
                 <div 
                   className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${project.imageUrl})` }}
+                  style={{ 
+                    backgroundImage: `url(${project.imageUrl})`,
+                    filter: 'brightness(0.8) contrast(1.1)'
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4">
@@ -132,17 +143,17 @@ export const Work = () => {
               </div>
               
               {/* Content */}
-              <div className="p-6">
-                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-violet-300 transition-colors">
+              <div className="p-5 h-[252px] flex flex-col">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-violet-300 transition-colors line-clamp-1">
                   {project.title}
                 </h3>
-                <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                <p className="text-gray-400 text-sm mb-4 leading-relaxed line-clamp-3 flex-grow">
                   {project.description}
                 </p>
                 
                 {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.techStack.map((tech) => (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.techStack.slice(0, 3).map((tech) => (
                     <span 
                       key={tech}
                       className="px-2 py-1 bg-white/5 text-gray-300 rounded text-xs border border-white/10"
@@ -150,22 +161,27 @@ export const Work = () => {
                       {tech}
                     </span>
                   ))}
+                  {project.techStack.length > 3 && (
+                    <span className="px-2 py-1 bg-white/5 text-gray-400 rounded text-xs border border-white/10">
+                      +{project.techStack.length - 3}
+                    </span>
+                  )}
                 </div>
                 
                 {/* Action Buttons */}
-                <div className="flex gap-3">
+                <div className="flex gap-3 mt-auto">
                   <button 
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white text-sm rounded-lg hover:from-violet-600 hover:to-purple-700 transition-all"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white text-sm rounded-lg hover:from-violet-600 hover:to-purple-700 transition-all flex-1 justify-center"
                     onClick={(e) => {
                       e.stopPropagation();
                       window.open(project.liveDemo, '_blank');
                     }}
                   >
                     <ExternalLink size={14} />
-                    Live Demo
+                    Demo
                   </button>
                   <button 
-                    className="flex items-center gap-2 px-4 py-2 bg-white/5 text-white text-sm rounded-lg hover:bg-white/10 transition-all border border-white/10"
+                    className="flex items-center gap-2 px-3 py-2 bg-white/5 text-white text-sm rounded-lg hover:bg-white/10 transition-all border border-white/10 flex-1 justify-center"
                     onClick={(e) => {
                       e.stopPropagation();
                       window.open(project.github, '_blank');
@@ -177,9 +193,11 @@ export const Work = () => {
                 </div>
               </div>
               
-              {/* Glow Effect */}
-              <div className={`absolute inset-0 rounded-2xl transition-all duration-500 pointer-events-none ${
-                hoveredWork === index ? 'shadow-2xl shadow-violet-500/20' : ''
+              {/* Subtle Inner Glow */}
+              <div className={`absolute inset-[1px] rounded-2xl transition-all duration-500 pointer-events-none ${
+                hoveredWork === index 
+                  ? 'shadow-[inset_0_0_20px_rgba(139,92,246,0.1)]' 
+                  : 'shadow-[inset_0_0_10px_rgba(255,255,255,0.02)]'
               }`} />
             </motion.div>
           ))}
