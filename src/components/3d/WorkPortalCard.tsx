@@ -1,7 +1,7 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Text } from "@react-three/drei";
+import { Text, Html } from "@react-three/drei";
 import * as THREE from "three";
 
 interface WorkPortalCardProps {
@@ -13,6 +13,8 @@ interface WorkPortalCardProps {
   index: number;
   hovered: boolean;
   imageUrl?: string;
+  onHover?: (hovered: boolean) => void;
+  onClick?: () => void;
 }
 
 export const WorkPortalCard = ({ 
@@ -23,16 +25,22 @@ export const WorkPortalCard = ({
   color, 
   index,
   hovered,
-  imageUrl = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+  imageUrl = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+  onHover,
+  onClick
 }: WorkPortalCardProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const portalRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
-  const expandedGroupRef = useRef<THREE.Group>(null);
+  const frameRef = useRef<THREE.Mesh>(null);
   
-  const workProjects = Array(5).fill(null); // Total number of projects
+  const workProjects = Array(5).fill(null);
   
-  // Enhanced portal shader with more immersive effects
+  // Gallery-style positioning - arrange in a circular gallery
+  const galleryRadius = 25;
+  const galleryHeight = 3;
+  
+  // Enhanced portal shader with gallery lighting effects
   const portalMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
       vertexShader: `
@@ -49,15 +57,14 @@ export const WorkPortalCard = ({
           
           vec3 newPosition = position;
           
-          // Enhanced wave distortions with multiple layers
-          float wave1 = sin(newPosition.x * 12.0 + time * 4.0) * 0.15;
-          float wave2 = cos(newPosition.y * 8.0 + time * 3.0) * 0.12;
-          float wave3 = sin(newPosition.x * 6.0 - newPosition.y * 4.0 + time * 2.0) * 0.1;
+          // Gallery spotlight effect
+          float wave1 = sin(newPosition.x * 8.0 + time * 2.0) * 0.1;
+          float wave2 = cos(newPosition.y * 6.0 + time * 1.5) * 0.08;
           
-          newPosition.z += (wave1 + wave2 + wave3) * (1.0 + hovered * 1.5);
+          newPosition.z += (wave1 + wave2) * (1.0 + hovered * 0.8);
           
-          // Pulsing effect
-          newPosition *= 1.0 + sin(time * 5.0) * 0.02 * hovered;
+          // Gentle pulsing for gallery ambiance
+          newPosition *= 1.0 + sin(time * 3.0) * 0.015 * hovered;
           
           gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
         }
@@ -75,56 +82,30 @@ export const WorkPortalCard = ({
           float dist = length(uv);
           float angle = atan(uv.y, uv.x);
           
-          // Multiple spiral layers with different speeds
-          float spiral1 = sin(angle * 20.0 + time * 5.0 - dist * 25.0) * 0.5 + 0.5;
-          float spiral2 = cos(angle * 15.0 - time * 4.0 + dist * 20.0) * 0.4 + 0.6;
-          float spiral3 = sin(angle * 10.0 + time * 3.0 - dist * 30.0) * 0.3 + 0.7;
-          float spiral4 = cos(angle * 25.0 - time * 6.0 + dist * 15.0) * 0.2 + 0.8;
+          // Gallery lighting patterns
+          float spotlight = sin(angle * 8.0 + time * 2.0 - dist * 15.0) * 0.4 + 0.6;
+          float ambient = cos(angle * 6.0 - time * 1.5 + dist * 12.0) * 0.3 + 0.7;
           
-          // Energy rings with varying intensities
-          float rings1 = sin(dist * 30.0 - time * 6.0) * 0.6 + 0.4;
-          float rings2 = cos(dist * 20.0 - time * 4.5) * 0.4 + 0.6;
-          float rings3 = sin(dist * 40.0 - time * 8.0) * 0.3 + 0.7;
+          // Subtle energy rings
+          float rings = sin(dist * 20.0 - time * 3.0) * 0.3 + 0.7;
           
-          // Particle effects
-          float noise1 = sin(uv.x * 60.0 + time * 12.0) * cos(uv.y * 60.0 + time * 10.0);
-          float noise2 = cos(uv.x * 40.0 - time * 8.0) * sin(uv.y * 45.0 + time * 9.0);
-          float particles = smoothstep(0.85, 1.0, noise1) * (1.0 - dist * 1.8);
-          float sparkles = smoothstep(0.9, 1.0, noise2) * (1.0 - dist * 2.2);
+          // Gallery color palette
+          vec3 galleryColor = mix(color, vec3(1.0, 0.98, 0.95), spotlight * 0.4);
+          galleryColor = mix(galleryColor, vec3(0.9, 0.95, 1.0), ambient * 0.3);
+          galleryColor += rings * vec3(0.3, 0.6, 0.9) * 0.4;
           
-          // Core portal effect
-          vec3 portalColor = mix(color, vec3(1.0, 0.95, 1.0), spiral1 * spiral2);
-          portalColor = mix(portalColor, vec3(0.8, 1.0, 1.0), spiral3 * spiral4 * 0.6);
-          
-          // Add ring effects
-          portalColor += rings1 * vec3(0.4, 0.9, 1.0) * 0.9;
-          portalColor += rings2 * vec3(1.0, 0.5, 0.9) * 0.7;
-          portalColor += rings3 * vec3(0.9, 0.8, 1.0) * 0.5;
-          
-          // Add particles and sparkles
-          portalColor += particles * vec3(1.0, 1.0, 0.8) * 0.8;
-          portalColor += sparkles * vec3(1.0, 0.9, 1.0) * 0.6;
-          
-          // Enhanced hover effects with color shifts
-          float hoverDistortion = hovered * (
-            sin(dist * 40.0 - time * 8.0) * 0.5 + 
-            cos(angle * 15.0 + time * 6.0) * 0.4 +
-            sin(uv.x * 30.0 + uv.y * 25.0 + time * 7.0) * 0.3
-          );
-          portalColor += hoverDistortion * vec3(1.0, 0.6, 0.9);
-          
-          // Energy field effect when hovered
+          // Enhanced hover glow
           if (hovered > 0.5) {
-            float energy = sin(time * 10.0) * 0.2 + 0.8;
-            portalColor *= energy;
-            portalColor += vec3(0.2, 0.4, 0.8) * sin(time * 15.0) * 0.3;
+            float glow = sin(time * 5.0) * 0.15 + 0.85;
+            galleryColor *= glow;
+            galleryColor += vec3(0.2, 0.3, 0.6) * sin(time * 8.0) * 0.2;
           }
           
-          // Enhanced alpha with smoother falloff
-          float alpha = (1.0 - smoothstep(0.0, 0.7, dist)) * (0.85 + hovered * 0.3);
-          alpha *= (0.8 + sin(time * 3.0) * 0.1);
+          // Gallery-appropriate alpha
+          float alpha = (1.0 - smoothstep(0.0, 0.6, dist)) * (0.7 + hovered * 0.2);
+          alpha *= (0.9 + sin(time * 2.0) * 0.05);
           
-          gl_FragColor = vec4(portalColor, alpha);
+          gl_FragColor = vec4(galleryColor, alpha);
         }
       `,
       uniforms: {
@@ -138,78 +119,59 @@ export const WorkPortalCard = ({
     });
   }, [color, hovered]);
 
-  // Enhanced glass material with better refraction
-  const glassMaterial = useMemo(() => {
-    return new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(color).multiplyScalar(0.3),
-      transmission: 0.95,
-      opacity: 0.2,
-      roughness: 0.05,
-      metalness: 0.1,
-      clearcoat: 1,
-      clearcoatRoughness: 0.05,
-      transparent: true,
-      ior: 1.8,
-      thickness: 0.5
+  // Gallery frame material
+  const frameMaterial = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color).multiplyScalar(0.8),
+      metalness: 0.9,
+      roughness: 0.1,
+      emissive: new THREE.Color(color).multiplyScalar(hovered ? 0.1 : 0.02),
     });
-  }, [color]);
+  }, [color, hovered]);
 
   useFrame((state) => {
     if (groupRef.current) {
-      // Enhanced circular rolling motion
-      const radius = 10;
-      const speed = 0.4;
+      // Gallery circular positioning
       const time = state.clock.elapsedTime;
-      const cardAngle = (index / workProjects.length) * Math.PI * 2 + time * speed;
+      const cardAngle = (index / workProjects.length) * Math.PI * 2;
       
-      // 3D circular path with vertical variation
-      const x = Math.cos(cardAngle) * radius;
-      const z = Math.sin(cardAngle) * radius;
-      const y = Math.sin(time * 0.3 + index * 1.5) * 2 + Math.cos(cardAngle * 2) * 0.5;
+      // Static gallery positioning with slight floating
+      const x = Math.cos(cardAngle) * galleryRadius;
+      const z = Math.sin(cardAngle) * galleryRadius;
+      const y = galleryHeight + Math.sin(time * 0.5 + index * 2) * 0.5;
       
       groupRef.current.position.set(x, y, z);
       
-      // Enhanced rolling rotation with multiple axes
+      // Face towards center
       groupRef.current.rotation.y = cardAngle + Math.PI;
-      groupRef.current.rotation.z = -cardAngle * 0.15;
-      groupRef.current.rotation.x = Math.sin(cardAngle * 0.5) * 0.2 + Math.cos(time * 0.2) * 0.1;
+      
+      // Slight floating rotation
+      groupRef.current.rotation.x = Math.sin(time * 0.3 + index) * 0.05;
+      groupRef.current.rotation.z = Math.cos(time * 0.4 + index) * 0.03;
     }
 
     if (meshRef.current) {
-      // Enhanced card dynamics
-      const targetScale = hovered ? 1.4 : 1;
+      // Gallery frame hover effects
+      const targetScale = hovered ? 1.15 : 1;
       const currentScale = meshRef.current.scale.x;
-      const newScale = THREE.MathUtils.lerp(currentScale, targetScale, 0.08);
+      const newScale = THREE.MathUtils.lerp(currentScale, targetScale, 0.06);
       meshRef.current.scale.setScalar(newScale);
       
-      // Floating and rotation effects
-      meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.6 + index) * 0.15;
-      meshRef.current.rotation.x = Math.cos(state.clock.elapsedTime * 0.4 + index) * 0.08;
-      
-      // Pulsing effect when hovered
+      // Gentle hover animation
       if (hovered) {
-        const pulse = Math.sin(state.clock.elapsedTime * 8) * 0.02 + 1;
+        const pulse = Math.sin(state.clock.elapsedTime * 4) * 0.01 + 1;
         meshRef.current.scale.multiplyScalar(pulse);
       }
     }
+
+    if (frameRef.current) {
+      // Frame lighting response
+      const targetScale = hovered ? 1.05 : 1;
+      frameRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.08);
+    }
     
     if (portalRef.current) {
-      portalRef.current.rotation.z = state.clock.elapsedTime * 1.5;
-      if (hovered) {
-        portalRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 2) * 0.1;
-        portalRef.current.rotation.y = Math.cos(state.clock.elapsedTime * 1.5) * 0.1;
-      }
-    }
-
-    // Enhanced expanded content animation
-    if (expandedGroupRef.current) {
-      expandedGroupRef.current.visible = hovered;
-      if (hovered) {
-        const targetScale = 1;
-        expandedGroupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.12);
-      } else {
-        expandedGroupRef.current.scale.lerp(new THREE.Vector3(0.6, 0.6, 0.6), 0.12);
-      }
+      portalRef.current.rotation.z = state.clock.elapsedTime * 0.8;
     }
 
     // Update shader uniforms
@@ -218,141 +180,121 @@ export const WorkPortalCard = ({
       portalMaterial.uniforms.hovered.value = THREE.MathUtils.lerp(
         portalMaterial.uniforms.hovered.value, 
         hovered ? 1.0 : 0.0, 
-        0.1
+        0.08
       );
     }
   });
 
   return (
-    <group ref={groupRef}>
-      {/* Main card with enhanced materials */}
-      <mesh ref={meshRef} castShadow receiveShadow>
-        <boxGeometry args={[3.5, 4.5, 0.3]} />
+    <group 
+      ref={groupRef}
+      onPointerEnter={() => onHover?.(true)}
+      onPointerLeave={() => onHover?.(false)}
+      onClick={onClick}
+    >
+      {/* Gallery Frame */}
+      <mesh ref={frameRef} castShadow receiveShadow>
+        <boxGeometry args={[6, 8, 0.5]} />
+        <primitive object={frameMaterial} attach="material" />
+      </mesh>
+      
+      {/* Main Display Screen */}
+      <mesh ref={meshRef} position={[0, 0, 0.26]} castShadow receiveShadow>
+        <boxGeometry args={[5, 7, 0.1]} />
         <meshStandardMaterial
-          color={color}
-          metalness={0.9}
-          roughness={0.1}
+          color="#000000"
+          metalness={0.1}
+          roughness={0.05}
           transparent
           opacity={0.95}
-          envMapIntensity={1.5}
         />
       </mesh>
       
-      {/* Enhanced project image with better materials */}
-      <mesh position={[0, 0.6, 0.16]} castShadow>
-        <planeGeometry args={[3, 2.2]} />
-        <meshStandardMaterial transparent opacity={0.9}>
+      {/* Project Image Display */}
+      <mesh position={[0, 0.5, 0.32]} castShadow>
+        <planeGeometry args={[4.5, 3.5]} />
+        <meshStandardMaterial transparent opacity={0.95}>
           <primitive attach="map" object={new THREE.TextureLoader().load(imageUrl)} />
         </meshStandardMaterial>
       </mesh>
       
-      {/* Multiple glass morphism elements */}
-      <mesh position={[1.3, 1.8, 0.17]}>
-        <circleGeometry args={[0.5, 24]} />
-        <primitive object={glassMaterial} attach="material" />
-      </mesh>
-      
-      <mesh position={[-1.3, 1.8, 0.17]}>
-        <circleGeometry args={[0.3, 20]} />
-        <primitive object={glassMaterial} attach="material" />
-      </mesh>
-      
-      {/* Enhanced portal effect with multiple layers */}
-      <mesh ref={portalRef} position={[0, -1.2, 0.18]}>
-        <circleGeometry args={[1, 50]} />
+      {/* Portal Effect */}
+      <mesh ref={portalRef} position={[0, -2, 0.33]}>
+        <circleGeometry args={[1.2, 32]} />
         <primitive object={portalMaterial} attach="material" />
       </mesh>
       
-      {/* Secondary portal ring */}
-      <mesh position={[0, -1.2, 0.16]} rotation={[0, 0, Math.PI / 4]}>
-        <ringGeometry args={[0.8, 1.2, 32]} />
+      {/* Gallery Lighting Ring */}
+      <mesh position={[0, -2, 0.31]} rotation={[0, 0, Math.PI / 4]}>
+        <ringGeometry args={[1, 1.4, 24]} />
         <meshBasicMaterial 
           color={color} 
           transparent 
-          opacity={hovered ? 0.3 : 0.1} 
+          opacity={hovered ? 0.4 : 0.15} 
           side={THREE.DoubleSide}
         />
       </mesh>
       
-      {/* Enhanced card title */}
+      {/* Title Plate */}
+      <mesh position={[0, -3.2, 0.32]}>
+        <boxGeometry args={[4, 0.6, 0.05]} />
+        <meshStandardMaterial 
+          color="#1a1a1a" 
+          metalness={0.8} 
+          roughness={0.2}
+        />
+      </mesh>
+      
+      {/* Project Title */}
       <Text
-        position={[0, -1.9, 0.2]}
-        fontSize={0.22}
+        position={[0, -3.2, 0.35]}
+        fontSize={0.25}
         color="white"
         anchorX="center"
         anchorY="middle"
-        maxWidth={3}
+        maxWidth={3.8}
         font="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600&display=swap"
       >
         {title}
       </Text>
       
-      {/* Greatly enhanced expanded project details */}
-      <group ref={expandedGroupRef} position={[0, 0, 0.25]}>
-        {/* Enhanced backdrop with gradient */}
-        <mesh position={[0, -0.3, -0.1]}>
-          <boxGeometry args={[4.2, 3, 0.15]} />
-          <meshStandardMaterial
-            color={0x000000}
-            transparent
-            opacity={0.95}
-            metalness={0.1}
-            roughness={0.8}
-          />
-        </mesh>
-        
-        {/* Detailed description */}
-        <Text
-          position={[0, 0.2, 0]}
-          fontSize={0.13}
-          color="#e0e0e0"
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={3.8}
-          lineHeight={1.3}
+      {/* Interactive Info Panel - appears on hover */}
+      {hovered && (
+        <Html
+          position={[0, 0, 0.5]}
+          center
+          distanceFactor={15}
+          transform
+          sprite
         >
-          {description}
-        </Text>
-        
-        {/* Technology tags */}
-        <Text
-          position={[0, -0.8, 0]}
-          fontSize={0.1}
-          color="#8b5cf6"
-          anchorX="center"
-          anchorY="middle"
-          maxWidth={3.5}
-        >
-          React • Three.js • WebGL • GLSL
-        </Text>
-        
-        {/* Enhanced status indicator */}
-        <mesh position={[0, -1.3, 0]}>
-          <circleGeometry args={[0.08, 20]} />
-          <meshBasicMaterial color="#00ff88" />
-        </mesh>
-        
-        <Text
-          position={[0, -1.6, 0]}
-          fontSize={0.09}
-          color="#00ff88"
-          anchorX="center"
-          anchorY="middle"
-        >
-          ◆ Explore Interactive Demo ◆
-        </Text>
-        
-        {/* Hover glow effect */}
-        <mesh position={[0, -0.3, -0.12]}>
-          <boxGeometry args={[4.5, 3.3, 0.1]} />
-          <meshBasicMaterial
-            color={color}
-            transparent
-            opacity={0.1}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      </group>
+          <div className="bg-black/90 backdrop-blur-sm border border-white/20 rounded-xl p-4 max-w-xs text-center transform -translate-y-12">
+            <h3 className="text-white font-semibold mb-2">{title}</h3>
+            <p className="text-gray-300 text-sm mb-3 line-clamp-3">
+              {description.split('.')[0]}.
+            </p>
+            <button 
+              className="px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-600 text-white text-sm rounded-lg hover:from-violet-600 hover:to-purple-700 transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick?.();
+              }}
+            >
+              View Details
+            </button>
+          </div>
+        </Html>
+      )}
+      
+      {/* Gallery Spotlights Effect */}
+      <spotLight 
+        position={[0, 8, 2]} 
+        angle={0.3} 
+        penumbra={0.5} 
+        intensity={hovered ? 1.5 : 0.8} 
+        color={color}
+        target={meshRef.current || undefined}
+        castShadow
+      />
     </group>
   );
 };

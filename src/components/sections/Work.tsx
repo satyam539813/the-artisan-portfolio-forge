@@ -3,10 +3,12 @@ import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { WorkPortalCard } from "@/components/3d/WorkPortalCard";
 import { Suspense, useState, useEffect } from "react";
-import { OrbitControls, Environment, Fog } from "@react-three/drei";
+import { OrbitControls, Environment, ContactShadows, Html } from "@react-three/drei";
+import * as THREE from "three";
 
 export const Work = () => {
   const [hoveredWork, setHoveredWork] = useState<number | null>(null);
+  const [selectedWork, setSelectedWork] = useState<number | null>(null);
   
   useEffect(() => {
     // Enhanced floating animations
@@ -23,31 +25,41 @@ export const Work = () => {
       title: "Neural Interface",
       description: "Advanced AI-powered brain-computer interface visualization platform. Features real-time neural signal processing, 3D brain mapping, and intuitive gesture controls for seamless human-computer interaction.",
       color: "#8b5cf6",
-      imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+      imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+      liveDemo: "https://neural-interface.demo.com",
+      techStack: ["React", "Three.js", "WebGL", "AI/ML"]
     },
     {
       title: "Quantum Portal",
       description: "Interactive quantum mechanics simulation environment. Explore quantum entanglement, superposition states, and wave-particle duality through immersive 3D visualizations and real-time calculations.",
       color: "#06b6d4",
-      imageUrl: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+      imageUrl: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      liveDemo: "https://quantum-portal.demo.com",
+      techStack: ["Three.js", "WebGL", "Physics", "React"]
     },
     {
       title: "Digital Genome",
       description: "Comprehensive DNA sequencing data visualization platform. Analyze genetic patterns, mutations, and evolutionary relationships through interactive 3D molecular structures and advanced algorithms.",
       color: "#ec4899",
-      imageUrl: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+      imageUrl: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+      liveDemo: "https://digital-genome.demo.com",
+      techStack: ["React", "D3.js", "WebGL", "Bioinformatics"]
     },
     {
       title: "Space Explorer",
       description: "Real-time cosmic data exploration and visualization tool. Navigate through galaxies, analyze celestial phenomena, and discover exoplanets using cutting-edge astronomical datasets and 3D rendering.",
       color: "#10b981",
-      imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+      imageUrl: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+      liveDemo: "https://space-explorer.demo.com",
+      techStack: ["Three.js", "React", "NASA APIs", "WebGL"]
     },
     {
       title: "Time Sculptor",
       description: "Revolutionary 4D temporal data manipulation interface. Visualize time-series data across multiple dimensions, predict future trends, and manipulate temporal sequences with intuitive controls.",
       color: "#f59e0b",
-      imageUrl: "https://images.unsplash.com/photo-1527576539890-dfa815648363"
+      imageUrl: "https://images.unsplash.com/photo-1527576539890-dfa815648363",
+      liveDemo: "https://time-sculptor.demo.com",
+      techStack: ["React", "Three.js", "TensorFlow.js", "WebGL"]
     }
   ];
 
@@ -80,30 +92,30 @@ export const Work = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              ✨ Immersive Portfolio Experience
+              ✨ Immersive 3D Gallery Experience
             </motion.div>
             
             <h2 className="text-6xl md:text-8xl font-playfair font-bold mb-8 leading-tight">
-              <span className="gradient-text">3D Portal</span>
+              <span className="gradient-text">Interactive</span>
               <br />
-              <span className="text-white/90">Projects</span>
+              <span className="text-white/90">Gallery</span>
             </h2>
             
             <p className="text-xl text-gray-300 max-w-5xl mx-auto font-inter leading-relaxed">
-              Navigate through an immersive 3D space where each project exists as a living portal. 
-              Hover to explore detailed insights and witness cutting-edge digital experiences come to life.
+              Step into an immersive 3D exhibition space where each project exists as a floating gallery piece. 
+              Navigate through space, interact with projects, and explore detailed insights in a museum-like experience.
             </p>
           </motion.div>
 
-          {/* Immersive 3D Canvas */}
-          <div className="relative h-[700px] w-full rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-b from-black/50 to-purple-950/20 backdrop-blur-sm">
+          {/* Immersive 3D Gallery Canvas */}
+          <div className="relative h-[80vh] w-full rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-b from-black/50 to-purple-950/20 backdrop-blur-sm">
             {/* 3D Scene Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/30 z-10 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/20 z-10 pointer-events-none" />
             
             <Canvas 
               camera={{ 
-                position: [0, 2, 18], 
-                fov: 60,
+                position: [0, 0, 20], 
+                fov: 50,
                 near: 0.1,
                 far: 1000
               }}
@@ -111,8 +123,8 @@ export const Work = () => {
                 antialias: true, 
                 alpha: true,
                 powerPreference: "high-performance",
-                toneMapping: 3,
-                toneMappingExposure: 1.2
+                toneMapping: THREE.ACESFilmicToneMapping,
+                toneMappingExposure: 1.0
               }}
               style={{ background: 'transparent' }}
               shadows
@@ -120,43 +132,76 @@ export const Work = () => {
               <Suspense fallback={null}>
                 {/* Enhanced Environment */}
                 <Environment preset="night" />
-                <Fog attach="fog" args={['#000000', 15, 35]} />
+                <fog attach="fog" args={['#000000', 25, 80]} />
                 
-                {/* Advanced lighting setup */}
-                <ambientLight intensity={0.3} color="#4c1d95" />
+                {/* Museum-like lighting setup */}
+                <ambientLight intensity={0.4} color="#4c1d95" />
                 <directionalLight 
-                  position={[10, 15, 10]} 
-                  intensity={0.8} 
+                  position={[10, 20, 10]} 
+                  intensity={1.2} 
                   color="#ffffff"
                   castShadow
                   shadow-mapSize-width={2048}
                   shadow-mapSize-height={2048}
+                  shadow-camera-far={50}
+                  shadow-camera-left={-20}
+                  shadow-camera-right={20}
+                  shadow-camera-top={20}
+                  shadow-camera-bottom={-20}
                 />
-                <pointLight position={[-15, 5, -15]} intensity={0.6} color="#8b5cf6" />
-                <pointLight position={[15, -5, 15]} intensity={0.4} color="#ec4899" />
+                
+                {/* Gallery spot lights */}
                 <spotLight 
-                  position={[0, 20, 0]} 
-                  angle={0.3} 
+                  position={[-15, 15, 10]} 
+                  angle={0.4} 
+                  penumbra={0.5} 
+                  intensity={0.8} 
+                  color="#8b5cf6"
+                  castShadow
+                />
+                <spotLight 
+                  position={[15, 15, 10]} 
+                  angle={0.4} 
+                  penumbra={0.5} 
+                  intensity={0.8} 
+                  color="#ec4899"
+                  castShadow
+                />
+                <spotLight 
+                  position={[0, 25, -10]} 
+                  angle={0.6} 
                   penumbra={0.8} 
-                  intensity={0.7} 
+                  intensity={0.6} 
                   color="#06b6d4"
                   castShadow
                 />
                 
-                {/* Interactive Controls */}
-                <OrbitControls 
-                  enableZoom={true} 
-                  enablePan={false} 
-                  enableRotate={true}
-                  autoRotate={true}
-                  autoRotateSpeed={0.5}
-                  minDistance={12}
-                  maxDistance={25}
-                  minPolarAngle={Math.PI / 6}
-                  maxPolarAngle={Math.PI - Math.PI / 6}
+                {/* Gallery floor with contact shadows */}
+                <ContactShadows 
+                  position={[0, -12, 0]} 
+                  opacity={0.6} 
+                  scale={80} 
+                  blur={2} 
+                  far={20} 
+                  color="#8b5cf6" 
                 />
                 
-                {/* Project Cards in 3D Space */}
+                {/* Interactive Camera Controls */}
+                <OrbitControls 
+                  enableZoom={true} 
+                  enablePan={true} 
+                  enableRotate={true}
+                  autoRotate={true}
+                  autoRotateSpeed={0.3}
+                  minDistance={15}
+                  maxDistance={35}
+                  minPolarAngle={Math.PI / 6}
+                  maxPolarAngle={Math.PI - Math.PI / 6}
+                  dampingFactor={0.05}
+                  enableDamping={true}
+                />
+                
+                {/* 3D Gallery Project Cards */}
                 {workProjects.map((project, index) => (
                   <WorkPortalCard
                     key={index}
@@ -168,21 +213,97 @@ export const Work = () => {
                     index={index}
                     hovered={hoveredWork === index}
                     imageUrl={project.imageUrl}
+                    onHover={(isHovered) => setHoveredWork(isHovered ? index : null)}
+                    onClick={() => setSelectedWork(index)}
                   />
                 ))}
+                
+                {/* Gallery Environment Elements */}
+                <mesh position={[0, -15, 0]} receiveShadow>
+                  <planeGeometry args={[100, 100]} />
+                  <meshStandardMaterial 
+                    color="#0a0a0a" 
+                    roughness={0.8} 
+                    metalness={0.1}
+                    transparent
+                    opacity={0.8}
+                  />
+                </mesh>
               </Suspense>
             </Canvas>
             
-            {/* Interactive Hints */}
+            {/* Interactive Navigation Hints */}
             <div className="absolute bottom-6 left-6 text-white/60 text-sm z-20">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-2 h-2 bg-violet-400 rounded-full animate-pulse" />
-                <span>Drag to rotate • Scroll to zoom • Hover cards for details</span>
+                <span>Drag to orbit • Scroll to zoom • Click cards for details</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse" />
+                <span>Auto-rotation enabled • Right-click to pan</span>
               </div>
             </div>
           </div>
           
-          {/* Enhanced Interactive Navigation */}
+          {/* Project Details Modal */}
+          {selectedWork !== null && (
+            <motion.div
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedWork(null)}
+            >
+              <motion.div
+                className="glass-effect p-8 rounded-2xl border border-white/20 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+                initial={{ scale: 0.8, y: 50 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.8, y: 50 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex justify-between items-start mb-6">
+                  <h3 className="text-3xl font-bold gradient-text">
+                    {workProjects[selectedWork].title}
+                  </h3>
+                  <button
+                    onClick={() => setSelectedWork(null)}
+                    className="text-white/60 hover:text-white transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
+                
+                <div 
+                  className="w-full h-48 rounded-xl mb-6 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${workProjects[selectedWork].imageUrl})` }}
+                />
+                
+                <p className="text-gray-300 mb-6 leading-relaxed">
+                  {workProjects[selectedWork].description}
+                </p>
+                
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {workProjects[selectedWork].techStack.map((tech, index) => (
+                    <span 
+                      key={index}
+                      className="px-3 py-1 bg-violet-500/20 text-violet-300 rounded-full text-sm"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                
+                <button
+                  className="w-full bg-gradient-to-r from-violet-500 to-purple-600 text-white py-3 rounded-xl hover:from-violet-600 hover:to-purple-700 transition-all duration-300"
+                  onClick={() => window.open(workProjects[selectedWork].liveDemo, '_blank')}
+                >
+                  View Live Demo
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+          
+          {/* Enhanced Project Grid Navigation */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6 max-w-7xl mx-auto mt-12">
             {workProjects.map((project, index) => (
               <motion.div
@@ -190,6 +311,7 @@ export const Work = () => {
                 className="group relative glass-effect p-6 rounded-2xl border border-white/10 cursor-pointer hover:border-violet-400/60 transition-all duration-500 bg-gradient-to-br from-white/5 to-white/[0.02]"
                 onMouseEnter={() => setHoveredWork(index)}
                 onMouseLeave={() => setHoveredWork(null)}
+                onClick={() => setSelectedWork(index)}
                 whileHover={{ scale: 1.05, y: -10 }}
                 initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -220,7 +342,7 @@ export const Work = () => {
                 
                 {/* Status and Indicator */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-violet-400 font-medium">Interactive 3D</span>
+                  <span className="text-xs text-violet-400 font-medium">3D Interactive</span>
                   <div className={`w-3 h-3 rounded-full transition-all duration-500 ${
                     hoveredWork === index ? 'bg-violet-400 shadow-lg shadow-violet-400/50' : 'bg-gray-600'
                   }`} />
@@ -250,7 +372,7 @@ export const Work = () => {
             <div className="inline-flex items-center gap-3 glass-effect px-6 py-3 rounded-full">
               <div className="w-2 h-2 bg-gradient-to-r from-violet-400 to-purple-500 rounded-full animate-pulse" />
               <p className="text-gray-300 text-sm font-inter">
-                Experience immersive 3D interaction • Hover project cards for detailed exploration
+                Navigate the 3D gallery • Hover and click for detailed exploration
               </p>
             </div>
           </motion.div>
